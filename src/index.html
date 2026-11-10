@@ -1,0 +1,1285 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>MDMD Markdown</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="renderer.js" defer></script>
+  </head>
+  <body>
+    <div id="error" role="alert" hidden>
+      <span id="error-text"></span
+      ><button id="dismiss-error" aria-label="关闭错误提示">×</button>
+    </div>
+    <main id="home" aria-label="MDMD 首页">
+      <aside class="home-rail">
+        <div class="home-brand">
+          <div class="home-icon" aria-hidden="true">
+            <img id="home-app-icon" alt="" />
+          </div>
+          <div class="home-name">
+            <h1>MDMD</h1>
+            <span>MARKDOWN STUDIO</span>
+          </div>
+        </div>
+        <nav class="home-nav" aria-label="首页导航">
+          <span class="home-current" aria-current="page"
+            ><span aria-hidden="true">⌂</span> 开始</span
+          >
+          <button id="home-history" disabled>
+            <span aria-hidden="true">◷</span> 历史记录
+          </button>
+          <button id="home-favorites" disabled>
+            <span aria-hidden="true">☆</span> 收藏
+          </button>
+        </nav>
+        <div class="home-rail-bottom">
+          <button id="home-settings" disabled>设置 <kbd>Ctrl + ,</kbd></button>
+          <p>本地 Markdown 阅读与编辑</p>
+          <span id="home-version">版本读取中…</span>
+        </div>
+      </aside>
+      <div class="home-workspace">
+        <header class="home-heading">
+          <span>你的文字，你的空间</span
+          ><span class="home-local">本地文件 · 自在书写</span>
+        </header>
+        <section class="home-start" aria-labelledby="home-title">
+          <div class="home-intro">
+            <p class="home-eyebrow">READ. WRITE. THINK.</p>
+            <h2 id="home-title">从一页文字，<br />开始新的想法。</h2>
+            <p class="home-description">
+              打开一份文档，或写下第一行。<br />让阅读与创作，在这里自然发生。
+            </p>
+            <div class="home-button-grid">
+              <button id="home-open" class="primary" disabled>
+                <span>打开文件</span><kbd>Ctrl + O</kbd
+                ><span aria-hidden="true">↗</span>
+              </button>
+              <button id="home-new" disabled>
+                <span aria-hidden="true">＋</span><span>新建 .md</span
+                ><kbd>Ctrl + N</kbd>
+              </button>
+              <button id="home-folder" disabled>
+                <svg
+                  aria-hidden="true"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.5"
+                >
+                  <path
+                    d="M3 6a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1Z"
+                  /></svg
+                ><span>打开文件夹</span><span aria-hidden="true">→</span>
+              </button>
+            </div>
+            <p class="home-formats">
+              支持 .md、.markdown、.mdown 和 .txt（UTF-8）
+            </p>
+          </div>
+          <article class="home-paper" aria-label="文档排版示意">
+            <div class="home-paper-bar">
+              <span>工作笔记.md</span><span>排版示意</span>
+            </div>
+            <div class="home-paper-body">
+              <span class="home-paper-kicker">IDEAS INTO WORDS</span>
+              <h3>给想法留一点空间</h3>
+              <p>记录灵感，整理思路。<br />每一行文字，都可以是新的开始。</p>
+              <blockquote>写下来，让思考更清晰。</blockquote>
+              <h4>今天，从这里开始</h4>
+              <ul>
+                <li>
+                  <span aria-hidden="true">✓</span><span>捕捉一个灵感</span>
+                </li>
+                <li>
+                  <span aria-hidden="true">✓</span><span>梳理一份计划</span>
+                </li>
+                <li>
+                  <span aria-hidden="true">○</span><span>写下你的下一步</span>
+                </li>
+              </ul>
+              <div class="home-paper-rule"></div>
+              <div class="home-paper-sign">
+                <span>Markdown</span><span aria-hidden="true">✳</span>
+              </div>
+            </div>
+          </article>
+        </section>
+        <section class="home-capabilities" aria-label="阅读与编辑能力">
+          <div>
+            <span class="home-step">01</span>
+            <h3>沉浸阅读</h3>
+            <p>大纲导航、主题与专注模式</p>
+          </div>
+          <div>
+            <span class="home-step">02</span>
+            <h3>顺手编辑</h3>
+            <p>分屏对照，或直接修改排版文字</p>
+          </div>
+          <div>
+            <span class="home-step">03</span>
+            <h3>分享成果</h3>
+            <p>将文档导出为 HTML 或 PDF</p>
+          </div>
+        </section>
+        <footer class="home-footer">
+          <div class="home-association">
+            <span id="association-title">默认关联状态</span
+            ><span
+              id="home-association-status"
+              class="neutral-badge"
+              role="status"
+              >未检测</span
+            >
+          </div>
+          <button id="home-association-manage">
+            管理系统集成 <span aria-hidden="true">↗</span>
+          </button>
+        </footer>
+      </div>
+    </main>
+
+    <div id="document-view" hidden>
+      <header class="toolbar">
+        <div class="brand">
+          <img id="document-app-icon" class="brand-mark" alt="" />
+          <div><strong>MDMD</strong><small>MARKDOWN STUDIO</small></div>
+        </div>
+        <div class="file-actions">
+          <button id="home-back" title="返回首页">首页</button>
+          <button id="open" class="primary" title="打开文档 · Ctrl+O">
+            打开文件</button
+          ><button id="new" title="新建 · Ctrl+N">新建</button>
+        </div>
+        <div class="doc-title">
+          <strong id="filename">未命名.md</strong
+          ><span id="filepath">本地阅读，自由书写</span>
+        </div>
+        <div
+          class="mode-switch"
+          data-toolbar-group="modes"
+          role="group"
+          aria-label="视图模式"
+        >
+          <button id="read-mode" aria-pressed="false">阅读</button
+          ><button id="split-mode" aria-pressed="true">分屏编辑</button>
+          <button id="inline-mode" aria-pressed="false">就地编辑</button>
+        </div>
+        <button id="external-edit" data-toolbar-group="external">
+          外部编辑
+        </button>
+        <select
+          id="format-action"
+          data-toolbar-group="format"
+          aria-label="格式工具"
+        >
+          <option value="">格式工具</option>
+          <option value="bold">加粗</option>
+          <option value="italic">斜体</option>
+          <option value="strike">删除线</option>
+          <option value="quote">引用</option>
+          <option value="code">代码</option>
+          <option value="link">插入链接</option>
+          <option value="listCycle">列表循环</option>
+          <option value="highlight">高亮</option>
+          <option value="clear">清除格式</option>
+        </select>
+        <button id="insert-image" data-toolbar-group="insert">插入图片</button>
+        <button id="insert-table" data-toolbar-group="insert">插入表格</button>
+        <button
+          id="insert-snippet"
+          data-toolbar-group="insert"
+          title="在顶层空行插入内置片段，也可输入 /"
+        >
+          插入片段
+        </button>
+        <button id="save" class="save-button" title="保存 · Ctrl+S">保存</button
+        ><button id="save-as" title="另存为 · Ctrl+Shift+S">另存为</button>
+        <button id="versions-open">历史版本</button
+        ><button id="output-open">导出</button
+        ><button id="document-settings" title="设置 · Ctrl+," disabled>
+          设置
+        </button>
+        <button id="focus-toggle" aria-pressed="false">专注模式</button>
+      </header>
+      <div id="focus-exit-zone" hidden>
+        <button id="focus-exit">退出专注 · Esc</button>
+      </div>
+      <div id="notice" class="notice" role="status" hidden>
+        <span id="notice-text"></span>
+        <div>
+          <button id="reload">重新载入磁盘版本</button
+          ><button id="notice-copy">另存副本</button>
+          <button id="notice-normalize" hidden>统一换行并编辑原文件</button>
+        </div>
+      </div>
+      <main class="workspace">
+        <aside class="sidebar" id="sidebar">
+          <div
+            id="sidebar-divider"
+            role="separator"
+            tabindex="0"
+            aria-label="调整侧边栏宽度"
+            aria-orientation="vertical"
+            aria-controls="sidebar"
+            aria-valuemin="160"
+            aria-valuemax="480"
+            aria-valuenow="212"
+            title="拖动调整侧边栏宽度；双击恢复默认"
+          ></div>
+          <nav class="sidebar-tabs" aria-label="导航类别">
+            <button id="tab-outline" aria-pressed="true">目录</button>
+            <button id="tab-history" aria-pressed="false">历史</button>
+            <button id="tab-favorites" aria-pressed="false">收藏</button>
+            <button id="tab-files" aria-pressed="false" disabled>文件</button>
+          </nav>
+          <div class="sidebar-heading" id="outline-heading">
+            <span>文档大纲</span><span id="heading-count">0</span>
+          </div>
+          <nav id="outline" aria-label="文档大纲"></nav>
+          <section id="history-panel" aria-label="历史记录" hidden>
+            <p id="history-warning" role="status" hidden></p>
+            <button id="history-retry" hidden>重试保存</button>
+            <nav id="history-list" aria-label="最近打开的文件"></nav>
+          </section>
+          <section id="favorites-panel" aria-label="收藏" hidden>
+            <div class="favorite-actions">
+              <button id="favorite-file" disabled>收藏当前文件</button>
+              <button id="favorite-folder" disabled>收藏当前目录</button>
+            </div>
+            <p id="favorites-warning" role="status" hidden></p>
+            <nav id="favorites-list" aria-label="收藏的文件和目录"></nav>
+          </section>
+          <section id="folder-panel" aria-label="文件列表" hidden>
+            <div class="folder-heading">
+              <h2 id="folder-name"></h2>
+              <button
+                id="folder-locate"
+                title="定位当前文件"
+                aria-label="定位当前文件"
+                disabled
+              >
+                ⌖
+              </button>
+            </div>
+            <p id="folder-path"></p>
+            <button id="folder-up" disabled>↑ 返回上级</button>
+            <p id="folder-root" class="folder-hint"></p>
+            <div id="folder-scroll">
+              <nav
+                id="folder-directories"
+                aria-label="当前文件夹的子目录"
+              ></nav>
+              <nav
+                id="folder-files"
+                aria-label="当前文件夹的 Markdown 文件"
+              ></nav>
+              <p id="folder-empty" role="status" hidden></p>
+              <p class="folder-hint">显示当前层级的子目录和 Markdown 文件。</p>
+            </div>
+          </section>
+          <div class="sidebar-bottom">
+            <span class="local-dot"></span>本地文件 · 基础功能离线可用
+            <div>UTF-8 · Markdown</div>
+          </div>
+        </aside>
+        <section
+          id="folder-welcome"
+          aria-labelledby="folder-welcome-title"
+          hidden
+        >
+          <h1 id="folder-welcome-title">请选择 Markdown 文件</h1>
+          <p id="folder-welcome-detail">从左侧文件列表选择文档开始阅读。</p>
+          <button id="folder-home">返回首页</button>
+        </section>
+        <section class="panes" id="panes">
+          <section class="pane editor-pane" aria-label="Markdown 编辑器">
+            <div class="pane-heading">
+              <span><i class="code-icon">M↓</i> Markdown 源码</span
+              ><button id="find" title="查找 · Ctrl+F">查找</button>
+            </div>
+            <div id="editor"></div>
+          </section>
+          <div
+            id="divider"
+            role="separator"
+            tabindex="0"
+            aria-label="调整编辑区宽度"
+            aria-orientation="vertical"
+            aria-valuemin="25"
+            aria-valuemax="75"
+            aria-valuenow="50"
+          ></div>
+          <section class="pane preview-pane" aria-label="阅读预览">
+            <div class="pane-heading">
+              <span><i class="preview-dot"></i> 阅读预览</span>
+              <div>
+                <label class="sync-label"
+                  ><input
+                    id="sync-scroll"
+                    type="checkbox"
+                    checked
+                  />同步滚动</label
+                ><button id="preview-find">查找正文</button
+                ><button id="refresh" title="手动刷新预览">刷新</button>
+              </div>
+            </div>
+            <div id="preview-search" hidden role="search">
+              <input
+                id="preview-query"
+                type="search"
+                aria-label="查找正文"
+                placeholder="查找正文"
+                maxlength="256"
+              />
+              <span id="preview-matches" role="status"></span>
+              <button id="preview-prev" aria-label="上一处匹配">↑</button>
+              <button id="preview-next" aria-label="下一处匹配">↓</button>
+              <button id="preview-search-close" aria-label="关闭搜索">×</button>
+              <span id="preview-search-note" role="status"></span>
+            </div>
+            <div id="preview-scroll">
+              <article id="preview" class="markdown-body"></article>
+            </div>
+          </section>
+        </section>
+      </main>
+      <footer>
+        <div>
+          <span id="save-indicator" class="status-dot"></span
+          ><span id="save-status" role="status">尚未保存到文件</span
+          ><span id="readonly"></span
+          ><span id="autosave-status" role="status"></span>
+        </div>
+        <div>
+          <span id="position">行 1，列 1</span
+          ><span id="wordcount" aria-label="字数统计">字数 0</span
+          ><span id="encoding">UTF-8</span><span id="line-ending">LF</span>
+        </div>
+      </footer>
+    </div>
+    <aside
+      id="link-preview"
+      role="region"
+      aria-label="链接预览"
+      aria-live="polite"
+      hidden
+    >
+      <button id="link-preview-close" aria-label="关闭预览">×</button>
+      <strong id="link-preview-title"></strong>
+      <small id="link-preview-address"></small>
+      <p id="link-preview-content"></p>
+      <small id="link-preview-note"></small>
+      <button id="link-preview-retry" hidden>重试</button>
+    </aside>
+    <dialog id="settings-dialog" aria-labelledby="settings-title">
+      <div class="settings-heading">
+        <h2 id="settings-title">设置</h2>
+        <button id="settings-close" aria-label="关闭设置" title="关闭 · Esc">
+          ×
+        </button>
+      </div>
+      <div class="settings-body">
+        <nav class="settings-nav" aria-label="设置类别">
+          <button id="settings-appearance" aria-current="page">外观</button>
+          <button id="settings-typography">排版</button>
+          <button id="settings-general">通用</button>
+          <button id="settings-shortcuts">快捷键</button>
+          <button id="settings-feedback">问题反馈</button>
+        </nav>
+        <section
+          id="settings-content"
+          aria-labelledby="settings-section-title"
+          tabindex="-1"
+        >
+          <h3 id="settings-section-title">外观</h3>
+          <div id="settings-appearance-content">
+            <fieldset class="theme-options">
+              <legend>主题</legend>
+              <label
+                ><input
+                  type="radio"
+                  name="theme"
+                  id="theme-system"
+                  value="system"
+                />跟随系统 <span>自动跟随系统外观</span></label
+              >
+              <label
+                ><input
+                  type="radio"
+                  name="theme"
+                  id="theme-light"
+                  value="light"
+                />浅色</label
+              >
+              <label
+                ><input
+                  type="radio"
+                  name="theme"
+                  id="theme-dark"
+                  value="dark"
+                />深色</label
+              >
+            </fieldset>
+            <div class="typography-row">
+              <label for="setting-palette">配色</label>
+              <button id="palette-manage">管理…</button>
+              <select id="setting-palette" aria-label="配色方案">
+                <option value="default">默认</option>
+              </select>
+            </div>
+            <div class="typography-row">
+              <label for="setting-corners">表格／代码块圆角风格</label>
+              <select id="setting-corners">
+                <option value="rounded">圆角</option>
+                <option value="square">直角</option>
+              </select>
+            </div>
+            <div id="corner-preview" aria-labelledby="corner-preview-label">
+              <p id="corner-preview-label" class="settings-note">
+                圆角效果预览
+              </p>
+              <div class="corner-preview-samples">
+                <div class="corner-preview-table">
+                  <table aria-label="表格示例">
+                    <thead>
+                      <tr>
+                        <th>表格示例</th>
+                        <th>值</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>MDMD</td>
+                        <td>1</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <pre
+                  aria-label="代码块示例"
+                ><span>代码块示例</span><code>const md = "MDMD";</code></pre>
+              </div>
+              <p class="settings-note">
+                随上方选项变化，不改变按钮和设置窗口；自定义 CSS
+                可能覆盖正文效果。
+              </p>
+            </div>
+            <p class="settings-note">
+              配色用于首页、侧栏、正文与编辑器通用颜色；设置窗口保持标准配色。语法高亮和提示色跟随主题。圆角仅影响正文表格和代码块。
+            </p>
+            <div class="typography-row">
+              <label
+                ><input type="checkbox" id="setting-custom-css" /> 启用自定义
+                CSS</label
+              >
+              <button id="css-edit">编辑 CSS…</button>
+            </div>
+            <p class="settings-note">仅影响正文预览；显示异常时可在此停用。</p>
+          </div>
+          <div id="settings-typography-content" hidden>
+            <div class="typography-row">
+              <span id="label-bodyFont">正文字体</span>
+              <span id="value-bodyFont" class="typography-value"></span>
+              <button
+                id="choose-bodyFont"
+                aria-labelledby="label-bodyFont choose-bodyFont"
+              >
+                选择…
+              </button>
+            </div>
+            <div class="typography-row">
+              <span id="label-codeFont">代码字体</span>
+              <span id="value-codeFont" class="typography-value"></span>
+              <button
+                id="choose-codeFont"
+                aria-labelledby="label-codeFont choose-codeFont"
+              >
+                选择…
+              </button>
+            </div>
+            <p class="settings-note">
+              代码字体用于预览代码块与行内代码；源码编辑器保持原字体。
+            </p>
+            <div class="typography-row">
+              <span>字号</span>
+              <div class="stepper">
+                <button
+                  data-step="fontScale"
+                  data-direction="-1"
+                  aria-label="减小字号"
+                >
+                  −
+                </button>
+                <output id="value-fontScale" aria-live="polite"></output>
+                <button
+                  data-step="fontScale"
+                  data-direction="1"
+                  aria-label="增大字号"
+                >
+                  +
+                </button>
+                <button id="reset-fontScale" aria-label="恢复默认字号">
+                  恢复默认
+                </button>
+              </div>
+            </div>
+            <p class="settings-note">75%–200%，每次 5%；默认 100%。</p>
+            <div class="typography-row">
+              <span>栏宽</span>
+              <div class="stepper">
+                <button
+                  data-step="columnWidth"
+                  data-direction="-1"
+                  aria-label="减小栏宽"
+                >
+                  −
+                </button>
+                <output id="value-columnWidth" aria-live="polite"></output>
+                <button
+                  data-step="columnWidth"
+                  data-direction="1"
+                  aria-label="增大栏宽"
+                >
+                  +
+                </button>
+                <button id="reset-columnWidth" aria-label="恢复默认栏宽">
+                  恢复默认
+                </button>
+              </div>
+            </div>
+            <p class="settings-note">
+              450–1600px，每次 50px；默认 900px。窗口较窄时自动适应。
+            </p>
+            <div class="typography-row">
+              <span>正文与目录间距</span>
+              <div class="stepper">
+                <button
+                  data-step="outlineGap"
+                  data-direction="-1"
+                  aria-label="减小正文与目录间距"
+                >
+                  −
+                </button>
+                <output id="value-outlineGap" aria-live="polite"></output>
+                <button
+                  data-step="outlineGap"
+                  data-direction="1"
+                  aria-label="增大正文与目录间距"
+                >
+                  +
+                </button>
+                <button
+                  id="reset-outlineGap"
+                  aria-label="恢复默认正文与目录间距"
+                >
+                  恢复默认
+                </button>
+              </div>
+            </div>
+            <p class="settings-note">
+              0–80px，每次 5px；默认
+              20px。调整侧栏与主内容区之间的留白，阅读及分屏均生效。
+            </p>
+            <div class="typography-row">
+              <span>目录字号</span>
+              <div class="stepper">
+                <button
+                  data-step="outlineFontScale"
+                  data-direction="-1"
+                  aria-label="减小目录字号"
+                >
+                  −
+                </button>
+                <output id="value-outlineFontScale" aria-live="polite"></output>
+                <button
+                  data-step="outlineFontScale"
+                  data-direction="1"
+                  aria-label="增大目录字号"
+                >
+                  +
+                </button>
+                <button
+                  id="reset-outlineFontScale"
+                  aria-label="恢复默认目录字号"
+                >
+                  恢复默认
+                </button>
+              </div>
+            </div>
+            <p class="settings-note">
+              75%–200%，每次 5%；默认 100%。仅调整大纲标题文字。
+            </p>
+            <div class="typography-row">
+              <span>目录箭头大小</span>
+              <div class="stepper">
+                <button
+                  data-step="outlineArrowScale"
+                  data-direction="-1"
+                  aria-label="减小目录箭头大小"
+                >
+                  −
+                </button>
+                <output
+                  id="value-outlineArrowScale"
+                  aria-live="polite"
+                ></output>
+                <button
+                  data-step="outlineArrowScale"
+                  data-direction="1"
+                  aria-label="增大目录箭头大小"
+                >
+                  +
+                </button>
+                <button
+                  id="reset-outlineArrowScale"
+                  aria-label="恢复默认目录箭头大小"
+                >
+                  恢复默认
+                </button>
+              </div>
+            </div>
+            <p class="settings-note">
+              75%–150%，每次 5%；默认 100%。点击区域保持不变。
+            </p>
+            <label class="settings-option typography-check"
+              ><input
+                id="setting-swapPanes"
+                type="checkbox"
+              />交换左右分栏</label
+            >
+            <p class="settings-note">
+              默认关闭。开启后分屏为左预览、右编辑；阅读模式不受影响。
+            </p>
+            <label class="settings-option typography-check"
+              ><input
+                id="setting-softBreaks"
+                type="checkbox"
+              />单回车换行</label
+            >
+            <p class="settings-note">
+              新用户默认开启，仅影响正文预览，不修改源码。已有配置升级保留原换行行为；大文档需手动刷新。
+            </p>
+            <label class="settings-option typography-check"
+              ><input
+                id="setting-codeLineNumbers"
+                type="checkbox"
+              />代码块显示行号</label
+            >
+            <label class="settings-option typography-check"
+              ><input
+                id="setting-task-strike"
+                type="checkbox"
+              />已完成任务显示删除线</label
+            >
+            <p class="settings-note">
+              默认开启；仅改变完成项文字外观，不影响子任务或 Markdown 源码。
+            </p>
+            <label class="settings-option typography-check"
+              ><input
+                id="setting-codeWrap"
+                type="checkbox"
+              />代码块自动换行</label
+            >
+            <p class="settings-note">
+              均默认关闭；折行续行不另编号，关闭折行后长代码可横向滚动。
+            </p>
+          </div>
+          <div id="settings-general-content" hidden>
+            <div class="typography-row">
+              <label for="setting-language">语言 / Language</label>
+              <select
+                id="setting-language"
+                aria-describedby="language-description"
+              >
+                <option value="system">跟随系统</option>
+                <option value="zh-CN">简体中文</option>
+                <option value="en">English</option>
+              </select>
+            </div>
+            <p id="language-description" class="settings-note">
+              默认跟随系统；中文系统使用简体中文，其余使用英文。仅切换界面，不翻译文档。
+            </p>
+            <label class="settings-option" for="setting-double-click-edit">
+              <input id="setting-double-click-edit" type="checkbox" />
+              <span>双击正文进入编辑</span>
+              <span
+                >默认关闭；开启后，双击文字临时进入就地编辑，其他块定位分屏源码。手动选择就地模式后，取消草稿不退出该模式。</span
+              >
+            </label>
+            <label class="settings-option" for="setting-autosave">
+              <input id="setting-autosave" type="checkbox" />
+              <span>自动保存文档</span>
+              <span
+                >默认关闭；停止修改 1
+                秒后保存已有文件。未命名文档先手动保存；就地和表格草稿需先应用。冲突或失败后暂停，请手动保存或重载。</span
+              >
+            </label>
+            <label class="settings-option" for="setting-history">
+              <input id="setting-history" type="checkbox" />
+              <span>历史记录</span>
+              <span>显示首页入口和侧栏标签；隐藏后仍记录打开过的文件。</span>
+            </label>
+            <label class="settings-option" for="setting-favorites">
+              <input id="setting-favorites" type="checkbox" />
+              <span>收藏</span>
+              <span
+                >显示首页入口和侧栏标签；隐藏不删除已收藏的文件和目录。</span
+              >
+            </label>
+            <label class="settings-option" for="setting-files">
+              <input id="setting-files" type="checkbox" />
+              <span>文件</span>
+              <span>显示文件栏；隐藏后打开文件夹会引导到此处重新开启。</span>
+            </label>
+            <label class="settings-option" for="setting-wordcount">
+              <input
+                id="setting-wordcount"
+                type="checkbox"
+                aria-describedby="wordcount-description"
+              />
+              <span>字数统计</span>
+              <span id="wordcount-description"
+                >在文档右下显示全文字数及选区统计；源码选区单独标明。</span
+              >
+            </label>
+            <div class="typography-row">
+              <span>外部编辑器</span
+              ><button id="external-options">选择外部编辑器</button>
+            </div>
+            <fieldset id="toolbar-visibility">
+              <legend>工具栏显示</legend>
+              <label class="settings-option"
+                ><input id="setting-tools-modes" type="checkbox" /><span
+                  >阅读与编辑模式</span
+                ></label
+              >
+              <label class="settings-option"
+                ><input id="setting-tools-external" type="checkbox" /><span
+                  >外部编辑工具</span
+                ></label
+              >
+              <label class="settings-option"
+                ><input id="setting-tools-format" type="checkbox" /><span
+                  >格式工具</span
+                ></label
+              >
+              <label class="settings-option"
+                ><input id="setting-tools-insert" type="checkbox" /><span
+                  >插入工具</span
+                ></label
+              >
+              <p class="settings-note">
+                隐藏工具不禁用功能或快捷键；文件操作、设置和专注入口始终保留。
+              </p>
+            </fieldset>
+            <div class="typography-row">
+              <span>系统集成</span>
+              <button id="integration-manage">管理…</button>
+            </div>
+            <p class="settings-note">右键菜单、.md 默认打开方式</p>
+            <div class="typography-row app-icon-row">
+              <span>应用图标</span>
+              <img
+                id="app-icon-preview"
+                width="36"
+                height="36"
+                alt="当前应用图标"
+              />
+              <span id="app-icon-state">默认</span>
+              <button id="app-icon-change" disabled>更换…</button>
+              <button id="app-icon-reset" disabled>恢复默认</button>
+            </div>
+            <p class="settings-note">
+              支持 ICO，最多 2 MiB；方形图层 16–256
+              像素。选择后立即保存，取消不更改。更新窗口、任务栏、已配置的 .md
+              图标及当前用户下指向本程序的桌面、开始菜单和固定快捷方式；EXE
+              内嵌图标不变。
+            </p>
+            <p id="app-icon-message" role="status" aria-live="polite"></p>
+            <div class="typography-row">
+              <label for="setting-title-format">标题栏显示格式</label>
+              <select
+                id="setting-title-format"
+                aria-describedby="title-format-description"
+              >
+                <option value="path">路径 + 文件名</option>
+                <option value="name">仅文件名</option>
+              </select>
+            </div>
+            <p class="settings-note" id="title-format-description">
+              默认路径 + 文件名，仅改变窗口标题；保留未保存标记和 MDMD
+              后缀，无文档时显示 MDMD。
+            </p>
+            <div class="typography-row">
+              <span>渲染引擎</span><button id="engines-manage">管理…</button>
+            </div>
+            <label class="settings-option" for="setting-link-preview">
+              <input id="setting-link-preview" type="checkbox" />
+              <span>链接悬停预览</span>
+              <span
+                >网页显示标题与摘要，Markdown
+                显示正文摘录；悬停网页链接会发起匿名网络请求。</span
+              >
+            </label>
+            <details id="release-guide" class="settings-note">
+              <summary>安装与更新说明</summary>
+              <p>
+                <span>当前版本</span>
+                <span id="release-version">版本读取中…</span>
+              </p>
+              <p>
+                尚未配置在线更新源。请保存文档并关闭
+                MDMD，再运行新版安装包，在原目录升级；同版本安装可修复程序。
+              </p>
+              <p>
+                升级及卸载保留设置、历史、收藏、缓存、文档和备份。便携版关闭后替换程序；移动位置前先解除系统集成。
+              </p>
+              <p>
+                需要 Windows 10/11 x64 和 WebView2 130
+                或更新版本。安装包缺少运行时时需要联网；离线环境请先安装微软官方运行时。
+              </p>
+            </details>
+          </div>
+          <div id="settings-shortcuts-content" hidden>
+            <div id="shortcut-schemes" role="group" aria-label="快捷键方案">
+              <span>快捷键方案</span>
+              <button data-scheme="mdmd">MDMD 默认</button>
+              <button data-scheme="typora">Typora</button>
+              <button data-scheme="obsidian">Obsidian</button>
+            </div>
+            <p class="settings-note">
+              各方案分别保留自定义键。以下为 MDMD 已支持动作的映射。
+            </p>
+            <p id="shortcut-message" role="status" aria-live="polite"></p>
+            <div id="shortcut-list"></div>
+            <p class="settings-note">
+              点击键帽录入组合；Backspace 恢复该方案默认，Esc 取消，Tab
+              退出录入。支持 Ctrl（可加 Shift）组合或
+              F2–F4、F6–F10；按键按键盘字母／符号位置识别。
+            </p>
+            <p class="settings-note">
+              应用全屏及整体侧栏隐藏尚未实现，暂不分配快捷键。
+            </p>
+          </div>
+          <div id="settings-feedback-content" class="feedback-form" hidden>
+            <section class="project-info" aria-labelledby="project-title">
+              <h3 id="project-title">MDMD 项目与更新</h3>
+              <p>MDMD 会在 GitHub 不定期更新，欢迎查看项目动态和版本说明。</p>
+              <p>
+                如果 MDMD 对你有帮助，欢迎到项目仓库点一颗 Star，支持后续开发。
+              </p>
+              <div class="integration-actions">
+                <button id="project-open" disabled>项目主页 ↗</button>
+                <button id="project-copy" disabled>复制链接</button>
+              </div>
+              <span id="project-url"></span>
+              <p
+                id="project-message"
+                role="status"
+                aria-live="polite"
+                hidden
+              ></p>
+            </section>
+            <p>
+              填写后可复制或导出，由你自行发送。关闭设置保留本次草稿，退出应用后清空。
+            </p>
+            <p>
+              问题描述必填；描述、期望和实际结果各限 2000 字符，复现步骤限 4000
+              字符。
+            </p>
+            <label for="feedback-problem">问题描述</label
+            ><textarea
+              id="feedback-problem"
+              maxlength="2000"
+              rows="3"
+              required
+            ></textarea>
+            <label for="feedback-steps">复现步骤</label
+            ><textarea id="feedback-steps" maxlength="4000" rows="3"></textarea>
+            <label for="feedback-expected">期望结果</label
+            ><textarea
+              id="feedback-expected"
+              maxlength="2000"
+              rows="3"
+            ></textarea>
+            <label for="feedback-actual">实际结果</label
+            ><textarea
+              id="feedback-actual"
+              maxlength="2000"
+              rows="3"
+            ></textarea>
+            <label class="settings-option"
+              ><input
+                id="feedback-environment"
+                type="checkbox"
+              />附加浏览器环境（不含文档和路径）</label
+            >
+            <label for="feedback-preview">反馈内容预览</label
+            ><textarea id="feedback-preview" readonly rows="7"></textarea>
+            <div class="integration-actions">
+              <button id="feedback-copy" disabled>复制反馈</button
+              ><button id="feedback-export" disabled>导出 .md</button
+              ><button id="feedback-clear">清空草稿</button>
+            </div>
+            <p id="feedback-message" role="status" aria-live="polite"></p>
+          </div>
+          <p class="settings-note" id="settings-autosave-note">
+            阅读设置修改后自动保存；系统集成、图标和渲染资源由对应操作管理。
+          </p>
+          <p id="settings-message" role="status" aria-live="polite"></p>
+        </section>
+      </div>
+    </dialog>
+    <dialog id="engines-dialog" aria-labelledby="engines-title">
+      <div class="settings-heading">
+        <h2 id="engines-title">渲染引擎</h2>
+        <button id="engines-close" aria-label="关闭">×</button>
+      </div>
+      <p>
+        按需下载固定版本。已就绪表示资源完整且通过隔离加载自检；文档中的高亮、公式和图表仍会分别检查语法并在失败时保留原文。
+      </p>
+      <section class="engine-row">
+        <strong>语法高亮</strong><span id="engine-highlight-status">未安装</span
+        ><small id="engine-highlight-version"></small
+        ><button id="engine-highlight-download" disabled>下载</button>
+        <p id="engine-highlight-error" role="status"></p>
+      </section>
+      <section class="engine-row">
+        <strong>Mermaid 图表</strong
+        ><span id="engine-mermaid-status">未安装</span
+        ><small id="engine-mermaid-version"></small
+        ><button id="engine-mermaid-download" disabled>下载</button>
+        <p id="engine-mermaid-error" role="status"></p>
+      </section>
+      <section class="engine-row">
+        <strong>数学公式（KaTeX）</strong
+        ><span id="engine-katex-status">未安装</span
+        ><small id="engine-katex-version"></small
+        ><button id="engine-katex-download" disabled>下载</button>
+        <p id="engine-katex-error" role="status"></p>
+      </section>
+      <section class="engine-row">
+        <strong>脑图（markmap）</strong
+        ><span id="engine-markmap-status">未安装</span
+        ><small id="engine-markmap-version"></small
+        ><button id="engine-markmap-download" disabled>下载</button>
+        <p id="engine-markmap-error" role="status"></p>
+      </section>
+      <section class="engine-row">
+        <strong>Mermaid 可视化编辑</strong><span>内置流程图编辑</span>
+      </section>
+      <div id="engines-progress-area" hidden>
+        <progress id="engines-progress"></progress
+        ><span id="engines-progress-text"></span
+        ><button id="engines-cancel">取消下载</button>
+      </div>
+      <p id="engines-message" role="status" aria-live="polite"></p>
+      <button id="engines-refresh">重新检测</button>
+      <p>
+        关闭窗口不取消下载；退出程序会中断下载。失败或取消保留原有资源，再次下载可重试。
+      </p>
+    </dialog>
+    <dialog id="integration-dialog" aria-labelledby="integration-title">
+      <div class="settings-heading">
+        <h2 id="integration-title">系统集成</h2>
+        <button id="integration-close" aria-label="关闭系统集成">×</button>
+      </div>
+      <p>
+        MDMD 无需账号或激活。以下设置只影响当前 Windows
+        用户。右键菜单立即生效；默认应用需在 Windows
+        中确认。关闭窗口不会撤销已完成的操作。
+      </p>
+      <section class="integration-section">
+        <div class="home-card-heading">
+          <h3>右键菜单</h3>
+          <span id="integration-menu-status" class="neutral-badge" role="status"
+            >未检测</span
+          >
+        </div>
+        <p>在 .md 文件上右键选择 MDMD。Windows 11 中可能位于“显示更多选项”。</p>
+        <div class="integration-actions">
+          <button id="integration-add-menu" class="primary">添加右键菜单</button
+          ><button id="integration-remove-menu">删除右键菜单</button>
+        </div>
+      </section>
+      <section class="integration-section">
+        <div class="home-card-heading">
+          <h3>默认关联</h3>
+          <span
+            id="integration-association-status"
+            class="neutral-badge"
+            role="status"
+            >未检测</span
+          >
+        </div>
+        <p>
+          Windows
+          需要你确认默认应用。点击下方按钮注册或修复已失效的关联，再在系统设置中为
+          .md 选择 MDMD 并确认。解除前请先选择其他应用，再返回解除。
+        </p>
+        <div class="integration-actions">
+          <button id="integration-set" class="primary">
+            在 Windows 中选择默认应用</button
+          ><button id="integration-remove">解除关联</button>
+        </div>
+        <button id="integration-default-settings">打开默认应用设置</button>
+      </section>
+      <p>
+        系统配置绑定当前程序位置。移动或删除 MDMD
+        前，请先解除关联并删除右键菜单。
+      </p>
+      <p id="integration-executable"></p>
+      <p id="integration-message" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button id="integration-refresh">刷新状态</button>
+      </div>
+    </dialog>
+    <dialog id="palette-dialog" aria-labelledby="palette-title">
+      <h2 id="palette-title">配色管理</h2>
+      <p class="settings-note">
+        默认方案只读；复制后可编辑浅色和深色配色。最多保存 20 个自定义方案。
+      </p>
+      <div class="palette-toolbar">
+        <label for="palette-select">方案</label
+        ><select id="palette-select"></select>
+        <button id="palette-copy">复制为新方案</button
+        ><button id="palette-delete">删除方案</button>
+      </div>
+      <label class="palette-name-label" for="palette-name"
+        >方案名称<input id="palette-name" maxlength="40" autocomplete="off"
+      /></label>
+      <div id="palette-fields"></div>
+      <p class="settings-note">
+        复制、修改和删除在点击“应用”后一起保存，并使用当前所选方案；取消或 Esc
+        放弃本次改动。请为文字和背景选择清晰的对比色。
+      </p>
+      <p id="palette-message" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button id="palette-cancel">取消</button
+        ><button id="palette-apply" class="primary">应用</button>
+      </div>
+    </dialog>
+    <dialog id="css-dialog" aria-labelledby="css-title">
+      <h2 id="css-title">自定义 CSS</h2>
+      <p id="css-help">
+        只作用于阅读／分屏正文，不影响设置和编辑器。使用 h1、p、pre、table
+        等选择器；正文根节点使用
+        .markdown-body。支持文字、尺寸、间距、边框等常用排版属性与
+        @media，不支持外部资源、转义、定位、动画、嵌套选择器和伪元素。
+      </p>
+      <label for="css-source">CSS 内容（最多 32,768 字符）</label>
+      <textarea
+        id="css-source"
+        maxlength="32768"
+        spellcheck="false"
+        aria-describedby="css-help"
+        placeholder="h1 { color: var(--accent); }&#10;pre { border-radius: 0; }"
+      ></textarea>
+      <label><input type="checkbox" id="css-enabled" /> 应用后启用</label>
+      <p class="settings-note">
+        浏览器可能忽略未知属性或修复不完整语法；仅应用识别出的受支持规则。应用会保存，取消／Esc
+        放弃草稿。清空后应用可移除自定义效果。
+      </p>
+      <p id="css-message" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button id="css-default">恢复默认</button
+        ><button id="css-cancel">取消</button
+        ><button id="css-apply" class="primary">应用</button>
+      </div>
+    </dialog>
+    <dialog id="font-dialog" aria-labelledby="font-title">
+      <h2 id="font-title">选择字体</h2>
+      <label for="font-name">本机字体名称</label>
+      <input
+        id="font-name"
+        list="font-suggestions"
+        maxlength="80"
+        placeholder="留空使用默认字体"
+        aria-describedby="font-help"
+        autocomplete="off"
+      />
+      <datalist id="font-suggestions">
+        <option value="Microsoft YaHei"></option>
+        <option value="SimSun"></option>
+        <option value="SimHei"></option>
+        <option value="KaiTi"></option>
+        <option value="DengXian"></option>
+        <option value="Segoe UI"></option>
+        <option value="Arial"></option>
+        <option value="Consolas"></option>
+        <option value="Cascadia Code"></option>
+        <option value="Courier New"></option>
+      </datalist>
+      <p id="font-help">
+        可选常用名称或输入一个本机字体名。未安装或缺少字符时使用回退字体；不下载字体。
+      </p>
+      <p id="font-preview">字体预览 · 中文阅读 Aa 0123 { code }</p>
+      <p id="font-message" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button id="font-default">恢复默认</button
+        ><button id="font-cancel">取消</button
+        ><button id="font-apply" class="primary">应用</button>
+      </div>
+    </dialog>
+    <dialog id="external-dialog" aria-labelledby="external-title">
+      <h2 id="external-title">外部编辑器</h2>
+      <p>
+        默认使用 Windows 记事本，也可选择其他编辑器的
+        EXE。仅传入当前文件路径，不使用文件关联或自定义命令参数。
+      </p>
+      <p id="external-path" style="overflow-wrap: anywhere"></p>
+      <p id="external-message" role="status"></p>
+      <p>
+        选择后立即保存；关闭不撤销。外部文件变化会提示重新载入，当前草稿不会被自动覆盖。
+      </p>
+      <div class="dialog-actions">
+        <button id="external-default">恢复默认</button
+        ><button id="external-choose">选择 EXE…</button
+        ><button id="external-close">关闭</button>
+      </div>
+    </dialog>
+    <dialog id="snippet-dialog" aria-labelledby="snippet-title">
+      <h2 id="snippet-title">插入片段</h2>
+      <p>
+        选择内置模板插入源码。取消保留已输入的
+        /；插入后可以撤销，未应用的就地草稿不会自动保存。
+      </p>
+      <label for="snippet-filter">搜索片段</label>
+      <input
+        id="snippet-filter"
+        type="search"
+        maxlength="80"
+        autocomplete="off"
+        placeholder="名称或英文关键字"
+      />
+      <label for="snippet-list">内置模板</label>
+      <select id="snippet-list" size="5"></select>
+      <pre id="snippet-preview" aria-label="片段源码预览"></pre>
+      <p id="snippet-message" role="status" aria-live="polite"></p>
+      <div class="dialog-actions">
+        <button id="snippet-cancel">取消</button
+        ><button id="snippet-apply" class="primary">插入</button>
+      </div>
+    </dialog>
+    <dialog id="normalize-dialog" aria-labelledby="normalize-title">
+      <form method="dialog">
+        <h2 id="normalize-title">统一换行并编辑原文件</h2>
+        <p>
+          将原文件换行统一为 LF，保留文字、UTF-8 编码、BOM
+          和原路径。原始字节备份到同目录
+          .mdmd-backups；备份或写入失败时停止转换。
+        </p>
+        <p>
+          这会修改磁盘文件。仅想修改副本时，请取消并选择“另存为可编辑副本”。
+        </p>
+        <div class="dialog-actions">
+          <button value="keep" autofocus>取消</button>
+          <button id="normalize-confirm" value="convert">备份并转换</button>
+        </div>
+      </form>
+    </dialog>
+    <dialog id="confirm-dialog" aria-labelledby="confirm-title">
+      <form method="dialog">
+        <div class="dialog-icon">!</div>
+        <h2 id="confirm-title">保留未保存的修改</h2>
+        <p id="confirm-detail"></p>
+        <div class="dialog-actions">
+          <button value="cancel" autofocus>取消</button
+          ><button value="discard">不保存</button
+          ><button class="primary" value="save">保存并继续</button>
+        </div>
+      </form>
+    </dialog>
+    <div id="favorite-menu" popover="auto" role="menu" aria-label="收藏操作">
+      <button id="menu-favorite-file" role="menuitem">收藏当前文件</button>
+      <button id="menu-favorite-folder" role="menuitem">收藏所在目录</button>
+      <button id="menu-inline" role="menuitem" hidden>就地编辑</button>
+      <button id="menu-table" role="menuitem" hidden>编辑表格</button>
+    </div>
+    <dialog id="image-dialog" aria-labelledby="image-title">
+      <header>
+        <h2 id="image-title">查看图片</h2>
+        <button id="image-close">关闭</button>
+      </header>
+      <div class="image-controls">
+        <button id="image-fit">适应窗口</button
+        ><label
+          >缩放
+          <input
+            id="image-scale"
+            type="range"
+            min="25"
+            max="400"
+            step="25"
+            value="100" /></label
+        ><output id="image-percent">100%</output>
+      </div>
+      <div class="image-scroll"><img id="image-full" alt="" /></div>
+    </dialog>
+    <dialog id="output-dialog" aria-labelledby="output-title">
+      <h2 id="output-title">导出文档</h2>
+      <label
+        >导出样式
+        <select id="output-style">
+          <option value="current">当前阅读样式</option>
+          <option value="simple">简洁浅色</option>
+        </select></label
+      >
+      <p>导出当前内容快照，包含未保存修改；不会保存或改变原文。</p>
+      <div class="table-controls">
+        <button id="output-html">导出 HTML</button
+        ><button id="output-print">PDF／打印</button
+        ><button id="output-close">关闭</button>
+      </div>
+      <div class="table-controls">
+        <label
+          >纸张
+          <select id="output-paper">
+            <option>A4</option>
+            <option>Letter</option>
+          </select></label
+        ><label
+          >方向
+          <select id="output-orientation">
+            <option value="portrait">竖向</option>
+            <option value="landscape">横向</option>
+          </select></label
+        ><label
+          >页边距（mm）<input
+            id="output-margin"
+            type="number"
+            min="5"
+            max="30"
+            step="5"
+            value="15"
+        /></label>
+      </div>
+      <p>在系统打印界面选择另存为 PDF 或打印机；系统选项可能覆盖页面设置。</p>
+      <div class="table-controls">
+        <button id="output-markdown">复制 Markdown</button
+        ><button id="output-html-copy">复制 HTML 源码</button
+        ><button id="output-rich">复制富文本</button>
+      </div>
+      <div class="table-controls">
+        <select id="output-table" aria-label="选择表格"></select
+        ><button id="output-csv">导出表格 CSV</button>
+      </div>
+      <p id="output-message" role="status"></p>
+    </dialog>
+    <dialog id="versions-dialog" aria-labelledby="versions-title">
+      <h2 id="versions-title">历史版本</h2>
+      <p id="versions-message" role="status"></p>
+      <div id="versions-list"></div>
+      <textarea id="versions-source" readonly aria-label="版本源码"></textarea>
+      <div class="table-controls">
+        <button id="versions-apply" disabled>恢复到编辑区（可撤销）</button
+        ><button id="versions-close">关闭</button>
+      </div>
+    </dialog>
+  </body>
+</html>

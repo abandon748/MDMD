@@ -1,0 +1,36 @@
+/node_modules/
+/dist/
+/release/
+/test-results/
+/work/
+/参考解析对象/
+*.log
+
+/.tools/
+/src-tauri/target/
+/src-tauri/gen/
+
+# Local settings, credentials and signing material
+.env
+.env.*
+!.env.example
+!.env.*.example
+*.local
+*.pem
+*.key
+*.pfx
+*.p12
+.npmrc
+.cargo/credentials
+.cargo/credentials.toml
+
+# Editor state, document backups and local history
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+.mdmd-backups/
+.moye-backups/
+*.bak
+*.tmp
+

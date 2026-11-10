@@ -1,0 +1,66 @@
+{
+  "$schema": "https://schema.tauri.app/config/2",
+  "productName": "MDMD",
+  "version": "0.2.0",
+  "identifier": "local.mdmd.markdown",
+  "build": {
+    "beforeBuildCommand": "npm run build",
+    "beforeDevCommand": "npm run build",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "windows": [
+      {
+        "label": "main",
+        "title": "MDMD Markdown",
+        "width": 1320,
+        "height": 860,
+        "minWidth": 850,
+        "minHeight": 560,
+        "dragDropEnabled": false
+      }
+    ],
+    "security": {
+      "csp": "default-src 'self'; script-src 'self' data:; style-src 'self' data: 'unsafe-inline'; img-src 'self' data:; font-src 'self' data:; connect-src ipc: http://ipc.localhost; object-src 'none'; frame-src blob:; base-uri 'none'; form-action 'none'"
+    }
+  },
+  "bundle": {
+    "active": true,
+    "icon": [
+      "icons/icon.ico",
+      "icons/icon.png"
+    ],
+    "targets": [
+      "nsis"
+    ],
+    "publisher": "MDMD",
+    "license": "GPL-3.0-only",
+    "resources": {
+      "../LICENSE": "LICENSE",
+      "../THIRD_PARTY_NOTICES.txt": "THIRD_PARTY_NOTICES.txt",
+      "../README.md": "使用说明.md",
+      "../examples/欢迎使用MDMD.md": "欢迎使用MDMD.md",
+      "../config/engine-licenses.txt": "第三方渲染资源许可.txt",
+      "../packaging/LICENSE-tauri.txt": "安装模板许可.txt"
+    },
+    "windows": {
+      "allowDowngrades": false,
+      "minimumWebview2Version": "130.0.0.0",
+      "webviewInstallMode": {
+        "type": "downloadBootstrapper",
+        "silent": true
+      },
+      "nsis": {
+        "installMode": "currentUser",
+        "languages": [
+          "SimpChinese",
+          "English"
+        ],
+        "template": "../packaging/installer.nsi",
+        "installerHooks": "../packaging/hooks.nsh",
+        "installerIcon": "icons/icon.ico",
+        "uninstallerIcon": "icons/icon.ico"
+      }
+    }
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "main-window",
+  "description": "Local app window only; file access is restricted by native document commands.",
+  "windows": ["main"],
+  "permissions": ["core:default"]
+}
