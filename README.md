@@ -1,4 +1,5 @@
 # MDMD · Markdown 阅读与编辑器
+绝大多数场景下，用 AI 输出 Markdown（md）比 Word 更省 token、出稿更快
 
 在 Windows 上打开本地 Markdown 文件，阅读、整理和修改你的笔记。
 
